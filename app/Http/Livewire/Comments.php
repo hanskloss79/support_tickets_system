@@ -4,15 +4,23 @@ namespace App\Http\Livewire;
 
 use App\Models\Comment;
 use Livewire\Component;
+use Livewire\WithPagination;
+//use Livewire\WithFileUploads;
 
 class Comments extends Component
 {   
-    public $comments = [];
-    public $newComment = '';
+    use WithPagination;
+    //use WithFileUploads;
     
+    //public $comments = [];
+    public $newComment = '';
+    protected $paginationTheme = 'bootstrap';
+    //public $image;
+
+
     public function mount()
     {
-        $this->comments = Comment::latest()->get();
+        //$this->comments = Comment::paginate(5);
     }
 
     public function updated()
@@ -33,13 +41,21 @@ class Comments extends Component
         ]);
         $createdComment->save();
         $this->newComment = '';
-        $this->comments = Comment::all()->sortDesc();
-        session()->flash('message','Utworzono notatkę !!!');
+        //$this->comments = Comment::all()->sortDesc();
+        session()->flash('message','Utworzono komentarz !!!');
+    }
 
+    public function remove($commentId)
+    {
+        Comment::find($commentId)->delete();
+        //$this->comments = Comment::all()->sortDesc();
+        session()->flash('message','Usunięto komentarz !!!');
     }
     
     public function render()
     {
-        return view('livewire.comments');
+        return view('livewire.comments', [
+            'comments' => Comment::latest()->paginate(5),
+        ]);
     }
 }
