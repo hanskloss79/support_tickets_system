@@ -13,7 +13,7 @@
         @if ($image)
             <img src="{{ $image }}" class="py-2" width="200"/>
         @endif
-        <input id="image" type="file" class="form-control w-auto" wire:change="$emit('fileChosen')">
+        <input id="image" type="file" class="form-control w-50" wire:change="$emit('fileChosen')">
     </section>
 
     <form class="d-flex  mt-3" wire:submit.prevent="addComment">
